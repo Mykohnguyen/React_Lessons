@@ -5,9 +5,9 @@ import Person from './Person/Person';
 class App extends Component {
   state= {
     persons:[
-      {name:"Max", age:28},
-      {name:"Manu", age: 29},
-      {name:"Stephanie", age:26}
+      {id:0,name:"Max", age:28},
+      {id:1,name:"Manu", age: 29},
+      {id:2,name:"Stephanie", age:26}
     ],
     showPersons:true
   }
@@ -21,13 +21,24 @@ class App extends Component {
         ]
       })
   }
-  nameChanged =(event)=>{
+  nameChanged =(event,id)=>{
+    const personindex = this.state.persons.findIndex(p =>{
+    
+      return p.id === id;
+      
+    })
+    console.log(personindex,"personindex")
+    const person = {
+      ...this.state.persons[personindex]
+    }
+    console.log(person, "person")
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personindex] = person;
+    console.log(persons)
     this.setState({
-      persons:[
-        {name:"Michael", age: 26},
-        {name:event.target.value, age: 29},
-        {name:"Stephanie", age:27}
-      ]
+      persons:persons
     })
   }
 
@@ -37,24 +48,26 @@ class App extends Component {
       showPersons:!doesShow
     })
   }
+  deletePerson=(index) =>{
+    const persons = [...this.state.persons];
+    persons.splice(index,1);
+    this.setState({persons:persons})
+  }
   render() {
+
     let persons = null;
-    if( this.state.showPersons){
+    if(this.state.showPersons == true){
         persons = (
         <div>
-            <Person
-            name= {this.state.persons[0].name}
-            age = {this.state.persons[0].age}
-            click = {this.switchNames}/>
-            <Person
-            name= {this.state.persons[1].name}
-            age = {this.state.persons[1].age}
-            changed ={this.nameChanged}> My Hobbies: Racing
-            </Person>
-            <Person
-            name= {this.state.persons[2].name}
-            age = {this.state.persons[2].age}/>
-          </div>
+          {this.state.persons.map((x,index) => {
+            return <Person
+            click={()=>this.deletePerson(index)} 
+            name={x.name} 
+            age ={x.age}
+            key={x.id}
+            changed={(event)=>this.nameChanged(event,x.id)}/>
+          })}
+        </div>
       )
     }
 
@@ -62,7 +75,7 @@ class App extends Component {
       <div className="App">
         <button onClick={this.togglePersons}>Hide People!</button>
         <button onClick={this.switchNames.bind(this,"Mikey")}>Switch Name </button>
-    
+      {persons}
       </div>
     );
   }
