@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import Person from './Person/Person';
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
+// import Person from '../components/Persons/Person/Person';
+import Persons from '../components/Persons/Persons'
+// import ErrorBoundary from '../ErrorBoundary/ErrorBoundary'
+import Cockpit from '../cockpit/cockpit'
 class App extends Component {
   state= {
     persons:[
@@ -54,29 +56,24 @@ class App extends Component {
     this.setState({persons:persons})
   }
   render() {
-
     let persons = null;
-    if(this.state.showPersons == true){
+    if(this.state.showPersons){
         persons = (
         <div>
-          {this.state.persons.map((x,index) => {
-            return <ErrorBoundary
-            key={x.id}>
-            <Person
-            click={()=>this.deletePerson(index)} 
-            name={x.name} 
-            age ={x.age}
-            
-            changed={(event)=>this.nameChanged(event,x.id)}/></ErrorBoundary>
-          })}
+          <Persons 
+          persons={this.state.persons}
+          clicked={this.deletePerson}
+          changed={this.nameChanged}/>
         </div>
       )
+      console.log(persons,"HI")
     }
-
     return (
       <div className="App">
-        <button onClick={this.togglePersons}>Hide People!</button>
-        <button onClick={this.switchNames.bind(this,"Mikey")}>Switch Name </button>
+      <Cockpit
+        toggle={this.togglePersons}
+        switch={this.switchNames.bind(this,"mikey")}>
+      </Cockpit>
       {persons}
       </div>
     );
