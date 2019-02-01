@@ -1,17 +1,21 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './App.css';
 // import Person from '../components/Persons/Person/Person';
 import Persons from '../components/Persons/Persons'
 // import ErrorBoundary from '../ErrorBoundary/ErrorBoundary'
 import Cockpit from '../cockpit/cockpit'
-class App extends Component {
+import WithClass from '../hoc/WithClass'
+
+class App extends PureComponent {
   state= {
     persons:[
       {id:0,name:"Max", age:28},
       {id:1,name:"Manu", age: 29},
       {id:2,name:"Stephanie", age:26}
     ],
-    showPersons:true
+    showPersons:true,
+    toggleClickCounter:0
+
   }
 
   switchNames=(newName)=>{
@@ -29,16 +33,13 @@ class App extends Component {
       return p.id === id;
       
     })
-    console.log(personindex,"personindex")
+    
     const person = {
       ...this.state.persons[personindex]
     }
-    console.log(person, "person")
-    person.name = event.target.value;
 
     const persons = [...this.state.persons];
     persons[personindex] = person;
-    console.log(persons)
     this.setState({
       persons:persons
     })
@@ -46,9 +47,13 @@ class App extends Component {
 
   togglePersons =() =>{
     const doesShow = this.state.showPersons;
-    this.setState({
-      showPersons:!doesShow
+    this.setState((prevState,props)=>{
+      return({
+        showPersons:!doesShow,
+        toggleClickCounter:prevState.toggleClickCounter +1
+      })
     })
+    // this appoach will help the confusion there would be if you were changing one of the states in another component
   }
   deletePerson=(index) =>{
     const persons = [...this.state.persons];
@@ -69,13 +74,16 @@ class App extends Component {
       console.log(persons,"HI")
     }
     return (
-      <div className="App">
-      <Cockpit
-        toggle={this.togglePersons}
-        switch={this.switchNames.bind(this,"mikey")}>
-      </Cockpit>
-      {persons}
-      </div>
+      <WithClass classes="App">
+        <button onClick={() =>{this.setState({showPersons: true})}}>Show Persons</button>
+        <Cockpit
+          toggle={this.togglePersons}
+          switch={this.switchNames.bind(this,"mikey")}>
+        </Cockpit>
+        {persons}
+    <p>Count {this.state.toggleClickCounter}
+    </p>
+      </WithClass>
     );
   }
 }
