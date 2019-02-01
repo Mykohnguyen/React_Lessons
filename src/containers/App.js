@@ -53,7 +53,7 @@ class App extends PureComponent {
         toggleClickCounter:prevState.toggleClickCounter +1
       })
     })
-    // this appoach will help the confusion there would be if you were changing one of the states in another component
+    // this appoach will help the confusion there would be if you were changing one of the states in another component because of async
   }
   deletePerson=(index) =>{
     const persons = [...this.state.persons];

@@ -1,5 +1,6 @@
 import React from 'react';
 import './Person.css'
+import PropTypes from 'prop-types'
 
 
 const person = (props) =>{
@@ -17,5 +18,11 @@ const person = (props) =>{
         
 
     )
+}
+person.propTypes={
+    click:PropTypes.func,
+    name:PropTypes.string,
+    age:PropTypes.number,
+    changed:PropTypes.func
 }
 export default person;
