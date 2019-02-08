@@ -1,28 +1,46 @@
-import React from 'react';
+import React, { Component} from 'react';
 import './Person.css'
 import PropTypes from 'prop-types'
+import {AuthContext} from '../../../containers/App'
 
 
-const person = (props) =>{
+class Person extends Component{
     // const rnd = Math.random();
 
     // if(rnd > .7) {
     //     throw new Error ('Something went wrong');
     // }
-    return (
+    constructor (props){
+        super(props);
+        this.inputElement = React.createRef();
+    }
+    componentDidMount(){
+        console.log("component did mount")
+        if(this.props.position == 1){
+            this.inputElement.current.focus()
+        }
+    }
+    render(){
+        return(
+            
         <div className="Person">
-            <p onClick={props.click}> I'm {props.name} and I am {props.age} </p>
-            <p>{props.children}</p> 
-            <input type="text" onChange={props.changed} value={props.name}/>
+        <AuthContext.Consumer>
+            {auth =>auth ? <p> I'm authenticated!</p> : null}
+            </AuthContext.Consumer>
+            <p onClick={this.props.click}> I'm {this.props.name} and I am {this.props.age} </p>
+            <p>{this.props.children}</p> 
+            <input
+            ref={this.inputElement} 
+            type="text" 
+            onChange={this.props.changed} value={this.props.name}/>
         </div>
-        
-
-    )
+        )
+    }
 }
-person.propTypes={
+Person.propTypes={
     click:PropTypes.func,
     name:PropTypes.string,
     age:PropTypes.number,
     changed:PropTypes.func
 }
-export default person;
+export default Person;

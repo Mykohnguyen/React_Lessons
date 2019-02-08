@@ -8,6 +8,7 @@ const persons = (props) =>{
         return <Person
         click={()=>props.clicked(index)} 
         name={x.name} 
+        position={x.id}
         age ={x.age}
         key={x.id}
         changed={(event)=>props.changed(event,x.id)}/>

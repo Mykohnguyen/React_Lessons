@@ -6,6 +6,7 @@ import Persons from '../components/Persons/Persons'
 import Cockpit from '../cockpit/cockpit'
 import WithClass from '../hoc/WithClass'
 
+export const AuthContext = React.createContext(false);
 class App extends PureComponent {
   state= {
     persons:[
@@ -14,7 +15,8 @@ class App extends PureComponent {
       {id:2,name:"Stephanie", age:26}
     ],
     showPersons:true,
-    toggleClickCounter:0
+    toggleClickCounter:0,
+    authenication: false
 
   }
 
@@ -37,7 +39,7 @@ class App extends PureComponent {
     const person = {
       ...this.state.persons[personindex]
     }
-
+    person.name=event.target.value
     const persons = [...this.state.persons];
     persons[personindex] = person;
     this.setState({
@@ -60,6 +62,11 @@ class App extends PureComponent {
     persons.splice(index,1);
     this.setState({persons:persons})
   }
+  login=()=>{
+    this.setState({
+      authenication :true
+    })
+  }
   render() {
     let persons = null;
     if(this.state.showPersons){
@@ -78,9 +85,10 @@ class App extends PureComponent {
         <button onClick={() =>{this.setState({showPersons: true})}}>Show Persons</button>
         <Cockpit
           toggle={this.togglePersons}
-          switch={this.switchNames.bind(this,"mikey")}>
+          switch={this.switchNames.bind(this,"mikey")}
+          login={this.login}>
         </Cockpit>
-        {persons}
+        <AuthContext.Provider value ={this.state.authenication}>{persons}</AuthContext.Provider>
     <p>Count {this.state.toggleClickCounter}
     </p>
       </WithClass>

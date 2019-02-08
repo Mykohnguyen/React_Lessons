@@ -10,4 +10,4 @@ const withclass = (props) =>{
 }
 
 
-export default withclass
+export default withclass;
